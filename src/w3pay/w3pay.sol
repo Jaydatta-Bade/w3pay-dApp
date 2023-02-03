@@ -1,6 +1,11 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity >=0.7.0;
+interface IPUSHCommInterface {
+    function sendNotification(address _channel, address _recipient, bytes calldata _identity) external;
+}
+
+
+pragma solidity ^0.8.9;
 
 contract w3pay {
     event transactions(address indexed from, address to, uint amount, string symbol);
@@ -8,6 +13,7 @@ contract w3pay {
 
     function _transfer(address payable _to, string memory symbol) public payable {
         _to.transfer(msg.value);
+        sendNotifications(_to, " Payment Received ", " Successfully!" );
         emit transactions(msg.sender, _to, msg.value, symbol);
     }
 
@@ -18,8 +24,45 @@ contract w3pay {
     function addRecipient(address recipient, string memory name) public {
         emit recipeints(msg.sender, recipient, name);
     } 
+
+    address public  EPNS_COMM_ADDRESS = 0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa;
+    address public channelAddress;
+
+    constructor(address _channelAddress){
+        channelAddress = _channelAddress;
+    }
+    
+    function setChannelAddress(address _channelAddress) public {
+        channelAddress = _channelAddress;
+    }
+
+                            // Wallet address you want to send msg. 
+    function sendNotifications(address _to , string memory _msg1, string memory _msg2) public returns (bool) {
+        
+        IPUSHCommInterface(EPNS_COMM_ADDRESS).sendNotification(
+            channelAddress , // Channel Address
+            _to, 
+            bytes(
+                string(             
+                    abi.encodePacked(
+                        
+                        "0", 
+                        "+", 
+                        "3", 
+                        "+", 
+                        "New Message!",
+                        "+", 
+                        msg.sender,
+                        _msg1, 
+                        " sent ",
+                        _msg2, 
+                        "Message Received!"
+                    )
+                )
+            )
+        );
+
+        return true;
+    }
 }
 
-// 0x9Ad232e2D3812d5E915B864119f8212D51BFB9F5 - polygon
-// 0xa02b2CCE714f874AD7593f50012c5d3756BF2773 - Ropsten
-// 0x6170b96101557cc11F076AA3907f7FF87Db54EE7 - Rinkeby
