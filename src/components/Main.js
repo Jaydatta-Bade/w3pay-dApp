@@ -1,8 +1,8 @@
 import React, {useState} from 'react'
 import Send from './Send'
-import Recipients from './Recipients'
-import RecentTx from './RecentTx'
-import GlobalTx from './GlobalTx'
+import Recipients from './Payees'
+import RecentTx from './History'
+import GlobalTx from './GlobalHistory'
 
 const Main = () => {
   const [route, setRoute] = useState('send');
@@ -16,15 +16,15 @@ const Main = () => {
         </li>
       {/* Recipients */}
         <li onClick={() => setRoute('recipients')} className={`list-none cursor-pointer py-2 w-1/4 ${route == 'recipients' ? "bg-black bg-opacity-60" : "bg-gray-900"} text-center rounded-tl-lg hover:bg-black hover:bg-opacity-60`}>
-          Recipients
+          Payees
         </li>
       {/* Recent Tx */}
         <li onClick={() => setRoute('recent_tx')} className={`list-none cursor-pointer py-2 w-1/4 ${route == 'recent_tx' ? "bg-black bg-opacity-60" : "bg-gray-900"} text-center rounded-tl-lg hover:bg-black hover:bg-opacity-60`}>
-          Recent Tx
+          History
         </li>
       {/* Global Tx */}
         <li onClick={() => setRoute('global_tx')} className={`list-none cursor-pointer py-2 w-1/4 ${route == 'global_tx' ? "bg-black bg-opacity-60" : "bg-gray-900"} text-center rounded-tl-lg hover:bg-black hover:bg-opacity-60`}>
-          Global Tx
+          Global History
         </li>
       </div>
       {/* Screen */}
